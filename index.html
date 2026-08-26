@@ -1,222 +1,606 @@
-
 <!DOCTYPE html>
 <html lang="bg">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KidsHub OS — Затворен цикъл на автоматизация за детски центрове</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  @page {
-    size: A4;
-    margin: 20mm 15mm;
-    background-color: #faf8f5;
-  }
-  body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #2b2b2b;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  *, *::before, *::after { box-sizing: inherit; }
-  
-  .header {
-    background-color: #005f73;
-    color: white;
-    padding: 35px 20px;
-    margin: -20mm -15mm 25px -15mm;
-    text-align: center;
-    border-bottom: 5px solid #e9d8a6;
-  }
-  .header h1 {
-    margin: 0;
-    font-family: 'Georgia', serif;
-    font-size: 26pt;
-    font-weight: normal;
-    letter-spacing: 1px;
-  }
-  .header p {
-    font-size: 13pt;
-    margin-top: 12px;
-    color: #e0fbfc;
-    font-weight: 300;
+  :root{
+    --ink:#F3F1E8;
+    --ink-soft:#C7C9DA;
+    --paper:#0E1020;
+    --panel:#171933;
+    --raised:#05060D;
+    --dark-fixed:#14162B;
+    --line:rgba(255,255,255,0.10);
+    --accent:#E2941F;
+    --accent-deep:#F4B454;
+    --accent-soft:rgba(226,148,31,0.16);
+    --good:#6FCB93;
+    --good-soft:rgba(111,203,147,0.14);
+    --bad:#E8836A;
+    --bad-soft:rgba(232,131,106,0.14);
+    --muted:#9497AC;
+    --radius:18px;
+    --shadow:0 1px 2px rgba(0,0,0,0.25), 0 12px 28px -14px rgba(0,0,0,0.55);
+    --shadow-lg:0 20px 60px -20px rgba(0,0,0,0.75);
   }
 
-  .intro-box {
-    background-color: white;
-    border: 1px solid #e9ecef;
-    padding: 20px 25px;
-    border-left: 5px solid #ee9b00;
-    margin-bottom: 25px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-  }
-  .intro-box h3 {
-    margin-top: 0;
-    color: #005f73;
-    font-family: 'Arial', sans-serif;
-    font-size: 16pt;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-  }
-  .intro-box p {
-    margin: 8px 0;
-    font-size: 11pt;
-  }
-  .intro-box strong {
-    color: #333;
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
   }
 
-  h2.day-title {
-    background-color: #94d2bd;
-    color: #003049;
-    padding: 12px 18px;
-    margin-top: 30px;
-    margin-bottom: 15px;
-    font-family: 'Georgia', serif;
-    font-size: 17pt;
-    border-radius: 4px;
-    page-break-after: avoid;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  }
-  
-  .timeline {
-    padding: 0 10px;
-    margin-bottom: 20px;
-  }
-  .timeline-item {
-    margin-bottom: 12px;
-    font-size: 11pt;
-    padding-left: 15px;
-    border-left: 2px solid #ca6702;
-  }
-  .timeline-item strong {
-    color: #0a9396;
+  body{
+    margin:0;
+    font-family:'IBM Plex Sans', sans-serif;
+    color:var(--ink-soft);
+    background:var(--paper);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
   }
 
-  .image-gallery {
-    text-align: center;
-    margin: 20px 0 30px 0;
-    page-break-inside: avoid;
+  h1,h2,h3,h4{ font-family:'Fraunces', serif; color:var(--ink); font-weight:600; letter-spacing:-0.01em; margin:0; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--accent-deep);
+    font-weight:600;
   }
-  
-  
-  .photo-card {
-    display: inline-block;
-    width: 45%;
-    margin: 0 2%;
-    background: white;
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-    border-radius: 4px;
-    vertical-align: top;
+  a{ color:inherit; }
+  ul{ margin:0; padding:0; list-style:none; }
+  img,svg{ display:block; max-width:100%; }
+  :focus-visible{ outline:2.5px solid var(--accent); outline-offset:3px; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 1.75rem; }
+
+  /* ---------- reveal-on-scroll ---------- */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.is-visible{ opacity:1; transform:none; }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:1000;
+    background:rgba(14,16,32,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
   }
-   .photo-card2 {
-    display: inline-block;
-    width: 65%;
-    margin: 0 2%;
-    background: white;
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-    border-radius: 4px;
-    vertical-align: top;
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding:1.1rem 0; }
+  .logo{ display:flex; align-items:center; gap:0.55rem; text-decoration:none; }
+  .logo-mark{
+    width:34px; height:34px; border-radius:9px; background:var(--raised);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--accent); font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:0.95rem;
+  }
+  .logo-text{ font-family:'Fraunces',serif; font-weight:600; font-size:1.2rem; color:var(--ink); }
+  .logo-text em{ font-style:normal; color:var(--accent-deep); }
+  .nav-links{ display:flex; gap:2.1rem; align-items:center; }
+  .nav-links a{ text-decoration:none; font-weight:500; font-size:0.92rem; color:var(--ink-soft); transition:color 0.15s; }
+  .nav-links a:hover{ color:var(--ink); }
+  .nav-cta{ display:none; }
+  @media (min-width:860px){ .nav-cta{ display:inline-flex; } }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:0.4rem;
+    padding:0.75rem 1.5rem; border-radius:999px; font-weight:600; font-size:0.93rem;
+    text-decoration:none; border:1.5px solid transparent; cursor:pointer;
+    transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+  .btn-primary{ background:var(--ink); color:var(--raised); }
+  .btn-primary:hover{ background:#fff; transform:translateY(-1px); box-shadow:var(--shadow); }
+  .btn-accent{ background:var(--accent); color:var(--dark-fixed); }
+  .btn-accent:hover{ background:#cf850f; transform:translateY(-1px); box-shadow:var(--shadow); }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ border-color:var(--ink); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:5.5rem 0 4.5rem;
+    display:grid; grid-template-columns:1fr; gap:3rem; align-items:center;
+  }
+  @media (min-width:960px){ .hero{ grid-template-columns:1.05fr 0.95fr; padding:6.5rem 0 5rem; } }
+
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:var(--accent-soft); color:var(--accent-deep);
+    font-family:'IBM Plex Mono',monospace; font-size:0.75rem; letter-spacing:0.06em;
+    padding:0.4rem 0.85rem; border-radius:999px; margin-bottom:1.4rem; font-weight:600;
+  }
+  .hero-badge::before{ content:'●'; font-size:0.6rem; color:var(--accent); }
+  .hero h1{ font-size:2.6rem; line-height:1.12; margin-bottom:1.25rem; }
+  @media (min-width:700px){ .hero h1{ font-size:3.35rem; } }
+  .hero h1 em{ font-style:normal; color:var(--accent-deep); }
+  .hero p.lead{ font-size:1.1rem; color:var(--muted); max-width:46ch; margin-bottom:2rem; }
+  .hero-cta{ display:flex; flex-wrap:wrap; gap:0.9rem; }
+
+  .hero-stats{ display:flex; gap:2.2rem; margin-top:2.75rem; flex-wrap:wrap; }
+  .hero-stat b{ display:block; font-family:'Fraunces',serif; font-size:1.7rem; color:var(--ink); }
+  .hero-stat span{ font-size:0.82rem; color:var(--muted); }
+
+  /* ---------- hero visual: mini system readout ---------- */
+  .hero-panel{
+    background:var(--raised); border-radius:22px; padding:1.6rem;
+    box-shadow:var(--shadow-lg);
+    color:#EDEBFF;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-panel::before{
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(120% 100% at 100% 0%, rgba(226,148,31,0.18), transparent 55%);
+    pointer-events:none;
+  }
+  .hero-panel-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:1.1rem; font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:#9EA1C4; letter-spacing:0.05em; }
+  .hero-panel-dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); display:inline-block; margin-right:6px; box-shadow:0 0 0 3px rgba(226,148,31,0.18); }
+  .readout-row{
+    display:flex; align-items:center; gap:0.85rem;
+    background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    border-radius:12px; padding:0.75rem 0.9rem; margin-bottom:0.6rem;
+  }
+  .readout-row .num{ font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:var(--accent); width:1.4rem; }
+  .readout-row .rt{ flex:1; }
+  .readout-row .rt b{ display:block; font-size:0.92rem; font-weight:600; color:#fff; }
+  .readout-row .rt span{ font-size:0.76rem; color:#9EA1C4; }
+  .readout-row .status{ font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:#8BD3A6; background:rgba(139,211,166,0.12); padding:0.25rem 0.55rem; border-radius:999px; }
+
+  /* ---------- generic section ---------- */
+  section{ padding:5rem 0; }
+  .section-head{ max-width:640px; margin-bottom:3rem; }
+  .section-head .eyebrow{ display:block; margin-bottom:0.9rem; }
+  .section-head h2{ font-size:2.1rem; margin-bottom:0.9rem; line-height:1.2; }
+  .section-head p{ color:var(--muted); font-size:1.02rem; }
+
+  /* ---------- loop diagram (signature element) ---------- */
+  .loop-section{ background:var(--panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .loop-row{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem;
+    position:relative; margin-bottom:0;
+  }
+  @media (max-width:860px){ .loop-row{ grid-template-columns:1fr; gap:0; } }
+
+  .loop-node{ position:relative; text-align:left; }
+  .loop-node .n{
+    font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:0.85rem;
+    width:2.4rem; height:2.4rem; border-radius:50%;
+    background:var(--raised); color:var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:1rem; flex-shrink:0;
+  }
+  .loop-node h3{ font-size:1.08rem; margin-bottom:0.5rem; }
+  .loop-node p{ font-size:0.9rem; color:var(--muted); }
+
+  .loop-connector{
+    display:none;
+  }
+  @media (min-width:861px){
+    .loop-connector{
+      display:block; position:absolute; top:1.2rem; left:calc(25% - 0.75rem); width:calc(50% + 1.5rem); height:2px;
+    }
+    .loop-connector svg{ width:100%; height:100%; overflow:visible; }
   }
 
-  .photo-card img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-    display: block;
-    border-radius: 2px;
+  @media (max-width:860px){
+    .loop-node{ padding-left:2.9rem; padding-bottom:2.2rem; border-left:2px dashed var(--line); margin-left:1.19rem; }
+    .loop-node:last-child{ border-left-color:transparent; padding-bottom:0; }
+    .loop-node .n{ position:absolute; left:-1.2rem; top:0; }
   }
-  .photo-caption {
-    font-size: 9.5pt;
-    color: #555;
-    margin-top: 10px;
-    font-style: italic;
-    font-family: 'Georgia', serif;
+
+  .loop-return{ margin-top:2.5rem; display:flex; align-items:center; gap:1rem; }
+  .loop-return svg{ flex-shrink:0; }
+  .loop-return p{ font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--accent-deep); letter-spacing:0.02em; }
+
+  /* ---------- modules ---------- */
+  .modules-grid{
+    display:flex; justify-content:center; align-items:flex-end; flex-wrap:wrap;
+    gap:0; padding:1rem 0 4.5rem; perspective:1600px;
   }
+
+  .module-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:20px;
+    padding:2.1rem 1.9rem; position:relative;
+    width:270px; flex-shrink:0;
+    transition:transform 0.45s cubic-bezier(.2,.8,.2,1), box-shadow 0.35s ease, z-index 0s;
+    box-shadow:var(--shadow);
+    -webkit-box-reflect: below 4px linear-gradient(transparent, transparent 55%, rgba(255,255,255,0.05));
+  }
+  @media (min-width:720px){
+    .module-card:nth-child(1){ transform:rotate(-9deg) translateY(14px); margin-right:-2.6rem; z-index:1; }
+    .module-card:nth-child(2){ transform:rotate(-3deg) translateY(-6px); margin-right:-2.6rem; z-index:2; }
+    .module-card:nth-child(3){ transform:rotate(3deg) translateY(-6px); margin-right:-2.6rem; z-index:3; }
+    .module-card:nth-child(4){ transform:rotate(9deg) translateY(14px); z-index:4; }
+    .modules-grid:not(:hover) .module-card:nth-child(2){ animation:fan-breathe 5s ease-in-out infinite; }
+    .modules-grid:not(:hover) .module-card:nth-child(3){ animation:fan-breathe 5s ease-in-out infinite 0.4s; }
+  }
+  @keyframes fan-breathe{
+    0%,100%{ filter:brightness(1); }
+    50%{ filter:brightness(1.015); }
+  }
+  .module-card:hover{
+    transform:rotate(0deg) translateY(-22px) scale(1.06) !important;
+    box-shadow:var(--shadow-lg);
+    z-index:10 !important;
+    -webkit-box-reflect: below 4px linear-gradient(transparent, transparent 45%, rgba(255,255,255,0.09));
+  }
+  @media (max-width:719px){
+    .modules-grid{ flex-direction:column; padding-bottom:1rem; gap:1.25rem; }
+    .module-card{ width:100%; -webkit-box-reflect:none; }
+  }
+
+  .module-card::before{
+    content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--accent);
+    opacity:0; transition:opacity 0.2s ease; border-radius:20px 0 0 20px;
+  }
+  .module-card:hover::before{ opacity:1; }
+  .module-top{ display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.2rem; }
+  .module-icon{ font-size:2.1rem; }
+  .module-index{ font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--muted); }
+  .module-card h3{ font-size:1.5rem; line-height:1.15; margin-bottom:0.7rem; }
+  .module-card > p{ color:var(--muted); font-size:0.95rem; margin-bottom:1.3rem; }
+  .feature-list li{ position:relative; padding-left:1.3rem; font-size:0.88rem; color:var(--ink-soft); margin-bottom:0.6rem; }
+  .feature-list li::before{ content:'—'; position:absolute; left:0; color:var(--accent-deep); }
+  .module-tag{
+    display:inline-block; margin-top:1.4rem; font-family:'IBM Plex Mono',monospace; font-size:0.7rem;
+    letter-spacing:0.06em; text-transform:uppercase; color:var(--accent-deep);
+    background:var(--accent-soft); padding:0.3rem 0.7rem; border-radius:6px;
+  }
+
+  /* ---------- comparison ---------- */
+  .compare-wrap{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+  .compare-row{ display:grid; grid-template-columns:1.1fr 1fr 1fr; }
+  .compare-row + .compare-row{ border-top:1px solid var(--line); }
+  .compare-row.head{ background:var(--raised); color:#fff; }
+  .compare-row.head div{ font-family:'IBM Plex Mono',monospace; font-size:0.75rem; letter-spacing:0.05em; text-transform:uppercase; }
+  .compare-row div{ padding:1.15rem 1.4rem; font-size:0.92rem; display:flex; align-items:center; gap:0.6rem; }
+  .compare-row .proc{ font-weight:600; color:var(--ink); font-family:'Fraunces',serif; font-size:1rem; }
+  .mark{ width:1.35rem; height:1.35rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; flex-shrink:0; font-weight:700; }
+  .mark.bad{ background:var(--bad-soft); color:var(--bad); }
+  .mark.good{ background:var(--good-soft); color:var(--good); }
+  @media (max-width:720px){
+    .compare-row{ grid-template-columns:1fr; }
+    .compare-row div{ padding:0.7rem 1.2rem; }
+    .compare-row.head{ display:none; }
+    .compare-row div:not(.proc)::before{ font-family:'IBM Plex Mono',monospace; font-size:0.65rem; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:0.2rem; }
+    .compare-row div:nth-child(2)::before{ content:'Ръчно управление'; }
+    .compare-row div:nth-child(3)::before{ content:'KidsHub OS'; }
+  }
+
+  /* ---------- pricing (ticket motif = signature risk) ---------- */
+  .pricing-grid{ display:grid; grid-template-columns:1fr; gap:1.5rem; }
+  @media (min-width:760px){ .pricing-grid{ grid-template-columns:1fr 1fr; } }
+
+  .ticket{
+    background:var(--panel); border:1.5px solid var(--line); border-radius:16px;
+    padding:2.3rem; position:relative;
+  }
+  .ticket.featured{ border-color:var(--raised); background:var(--raised); color:#EDEBFF; }
+  .ticket.featured .price-desc, .ticket.featured .feature-list-alt li{ color:#B7B9D6; }
+  .ticket.featured h3{ color:#fff; }
+  .ticket-stub{
+    position:absolute; top:0; bottom:0; right:6.5rem;
+    border-left:2px dashed var(--line);
+  }
+  .ticket.featured .ticket-stub{ border-left-color:rgba(255,255,255,0.2); }
+  @media (max-width:520px){ .ticket-stub{ display:none; } }
+
+  .ticket-badge{
+    position:absolute; top:1.5rem; right:1.5rem;
+    font-family:'IBM Plex Mono',monospace; font-size:0.68rem; letter-spacing:0.05em; text-transform:uppercase;
+    background:var(--accent); color:var(--dark-fixed); padding:0.32rem 0.65rem; border-radius:6px; font-weight:600;
+  }
+  .ticket h3{ font-size:1.3rem; margin-bottom:0.6rem; }
+  .price-desc{ color:var(--muted); font-size:0.92rem; margin-bottom:1.5rem; max-width:80%; }
+  .feature-list-alt li{ position:relative; padding-left:1.4rem; font-size:0.9rem; margin-bottom:0.65rem; color:var(--ink-soft); }
+  .feature-list-alt li::before{ content:'✓'; position:absolute; left:0; color:var(--accent-deep); font-weight:700; }
+  .ticket.featured .feature-list-alt li::before{ color:var(--accent); }
+  .ticket .btn{ margin-top:1.6rem; width:100%; }
+
+  /* ---------- closing CTA ---------- */
+  .cta-band{ background:var(--raised); color:#fff; border-radius:26px; padding:3.5rem 2.5rem; text-align:center; margin:1rem 0 0; }
+  .cta-band h2{ color:#fff; font-size:2rem; margin-bottom:0.8rem; }
+  .cta-band p{ color:#B7B9D6; max-width:46ch; margin:0 auto 2rem; }
+
+  footer{ padding:2.5rem 0; text-align:center; color:var(--muted); font-size:0.83rem; }
+
+  .contact-line{ display:flex; flex-wrap:wrap; gap:0.9rem; margin-top:1.1rem; }
+  .contact-pill{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-size:0.85rem; font-weight:600; color:var(--ink-soft);
+    background:rgba(255,255,255,0.05); border:1px solid var(--line);
+    padding:0.55rem 1rem; border-radius:999px; text-decoration:none;
+    transition:border-color 0.15s, color 0.15s;
+  }
+  .contact-pill:hover{ border-color:var(--accent); color:var(--accent-deep); }
+  .ticket .contact-line{ margin-top:1.6rem; }
+  .cta-band .contact-line{ justify-content:center; margin-top:1.4rem; }
+  .cta-band .contact-pill{ background:rgba(255,255,255,0.06); color:#EDEBFF; }
+
+  /* ---------- ambient moving background ---------- */
+  .ambient{ position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none; }
+  .blob{ position:absolute; border-radius:50%; filter:blur(90px); opacity:0.20; }
+  .blob-1{ width:420px; height:420px; background:var(--accent-soft); top:-120px; left:-100px; animation:drift1 26s ease-in-out infinite; }
+  .blob-2{ width:360px; height:360px; background:#DCE7DD; top:40%; right:-140px; animation:drift2 32s ease-in-out infinite; }
+  .blob-3{ width:300px; height:300px; background:#F3E3D0; bottom:-100px; left:30%; animation:drift1 22s ease-in-out infinite reverse; }
+  @keyframes drift1{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(60px,40px) scale(1.12); } }
+  @keyframes drift2{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-50px,-30px) scale(1.08); } }
+  @media (prefers-reduced-motion: reduce){ .blob{ animation:none; } }
+
+  /* ---------- flow dot along the loop connectors ---------- */
+  .flow-dot{ position:absolute; top:-2.5px; width:7px; height:7px; border-radius:50%; background:var(--accent); animation:flow-move 2.2s linear infinite; box-shadow:0 0 0 3px rgba(226,148,31,0.18); }
+  @keyframes flow-move{ 0%{ left:0; opacity:0; } 8%{ opacity:1; } 92%{ opacity:1; } 100%{ left:96%; opacity:0; } }
+  @media (prefers-reduced-motion: reduce){ .flow-dot{ animation:none; opacity:0; } }
+
+  /* ---------- live pulse on hero readout ---------- */
+  .readout-row{ animation:row-pulse 6s ease-in-out infinite; }
+  .readout-row:nth-child(2){ animation-delay:0.5s; }
+  .readout-row:nth-child(3){ animation-delay:1s; }
+  .readout-row:nth-child(4){ animation-delay:1.5s; }
+  @keyframes row-pulse{ 0%,80%,100%{ background:rgba(255,255,255,0.04); } 88%{ background:rgba(226,148,31,0.10); } }
+  @media (prefers-reduced-motion: reduce){ .readout-row{ animation:none; } }
+  .hero-panel-dot{ animation:dot-blink 1.8s ease-in-out infinite; }
+  @keyframes dot-blink{ 0%,100%{ opacity:1; } 50%{ opacity:0.35; } }
 </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>Калибрия: Trip Planing</h1>
-    <p>София ✈ Ламеция Терме | Пицо, Бриатико, Замброне и Тропеа</p>
-  </div>
+<div class="ambient">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
 
-  <div class="intro-box">
-    <h3>INTRO</h3>
-    <p>Добре дошли в Калабрия – перлата на Южна Италия! Маршрутът е внимателно балансиран, за да ви предложи както спиращи дъха гледки и романтични градчета, така и време за релакс на най-красивите тюркоазени плажове.</p>
-    <p><strong>Начална дата:</strong> Неделя, 2 Август</p>
-    <p><strong>Крайна дата:</strong> Вторник, 4 Август</p>
-    <p><strong>Сбит план:</strong> Ламеция Терме ➝ Пицо ➝ Бриатико ➝ Замброне ➝ Тропеа ➝ Ламеция Терме</p>
+<header>
+  <div class="wrap nav">
+    <a href="#" class="logo">
+      <span class="logo-mark">K</span>
+      <span class="logo-text">KidsHub<em>OS</em></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#ecosystem">Екосистема</a></li>
+      <li><a href="#modules">Модули</a></li>
+      <li><a href="#comparison">Предимства</a></li>
+      <li><a href="#pricing">Варианти</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-primary nav-cta">Заяви демо</a>
   </div>
+</header>
 
-  <!-- ДЕН 1 -->
-  <h2 class="day-title">Ден 1: Пристигане и Очарованието на Пицо</h2>
-  <div class="timeline">
-    <div class="timeline-item"><strong>12:35 ч.</strong> – Час на излитане от летище София (Терминал 1).</div>
-    <div class="timeline-item"><strong>13:15 ч.</strong> – Час на кацане в Ламеция Терме (местно време).</div>
-    <div class="timeline-item"><strong>14:00 ч.</strong> – Взимане на предварително резервираната кола под наем от терминала.</div>
-    <div class="timeline-item"><strong>14:30 - 16:30 ч.</strong> – <em>Ламеция Терме:</em> Подходящо за следобедно кафе. Разходка в стария център Nicastro, покрай Катедралата и малките улички.</div>
-    <div class="timeline-item"><strong>17:30 - 19:30 ч.</strong> – <em>Пицо (Pizzo):</em> Задължителна спирка! Разглеждане на Замъка Murat и църквата Piedigrotta, издълбана в самите скали. Насладете се на стария площад с изглед към Марината и задължително опитайте прочутия десерт Tartufo di Pizzo!</div>
-    <div class="timeline-item"><strong>20:00 ч.</strong> – Придвижване до квартирата в района на Тропеа / Замброне и настаняване. Свободно време за първи впечатления и вечеря.</div>
-  </div>
-
-  <div class="image-gallery">
-    <div class="photo-card">
-      <img src="https://images.winalist.com/blog/wp-content/uploads/2025/07/10120204/adobestock-471388709-1500x709.jpeg" alt="Pizzo Coast">
-      <div class="photo-caption">Крайбрежието на Пицо и заливът</div>
+<section class="hero wrap">
+  <div>
+    <span class="hero-badge">Затворен цикъл на автоматизация</span>
+    <h1>Резервация, поръчка и заплата — <em>едно вписване, четири системи готови.</em></h1>
+    <p class="lead">Софтуерна екосистема, която свързва резервациите за партита, заявките към доставчици, финансовия баланс и графика на персонала — без нищо да се въвежда два пъти.</p>
+    <div class="hero-cta">
+      <a href="#modules" class="btn btn-primary">Разгледай модулите</a>
+      <a href="#pricing" class="btn btn-ghost">Виж вариантите</a>
     </div>
-    <div class="photo-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiL7jLL9zvxoxt5mZsf3Rfn9UG_ha5zw1RnQMcP8C9_uKeGkqfvwV8NvdE&s=10" alt="Tartufo di Pizzo">
-      <div class="photo-caption">Традиционният десерт Tartufo di Pizzo</div>
-    </div>
-  </div>
-
-  <!-- ДЕН 2 -->
-  <h2 class="day-title">Ден 2: Кристални води, Замброне и Тропеа</h2>
-  <div class="timeline">
-    <div class="timeline-item"><strong>10:00 - 10:40 ч.</strong> – <em>Бриатико (Briatico):</em> Кратка спирка за разходка по крайбрежната алея. Разгледайте малкото пристанище и красивите гледки към брега.</div>
-    <div class="timeline-item"><strong>11:00 - 14:00 ч.</strong> – <em>Замброне (Zambrone):</em> Плажно време! Посещение на <strong>Paradiso del Sub</strong> – един от най-красивите плажове в Калабрия. Тюркоазена вода, скали и естествени заливчета. Идеално за къпане и събиране на тен.</div>
-    <div class="timeline-item"><strong>14:30 ч.</strong> – Обяд в местно крайбрежно заведение с морски дарове.</div>
-    <div class="timeline-item"><strong>16:00 ч. до края на деня</strong> – <em>Тропеа:</em> Време за разглеждане на перлата на крайбрежието. Посещение на църквата Santa Maria dell’Isola, разположена живописно на скалата над плажа.</div>
-    <div class="timeline-item"><strong>Привечер</strong> – Разходка из стария град на Тропеа, панорамните площадки над плажа, главната улица Corso Vittorio Emanuele и малките магазинчета.</div>
-  </div>
-
-  <div class="image-gallery">
-    <div class="photo-card">
-      <img src="https://images.winalist.com/blog/wp-content/uploads/2025/07/10122238/adobestock-515729288-1500x945.jpeg" alt="Zambrone Beach">
-      <div class="photo-caption">Тюркоазените води на Замброне</div>
-    </div>
-    <div class="photo-card">
-      <img src="https://media-cdn.tripadvisor.com/media/attractions-splice-spp-674x446/07/71/96/6e.jpg" alt="Tropea Church">
-      <div class="photo-caption">Църквата Santa Maria dell'Isola, Тропеа</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><b>4</b><span>свързани модула</span></div>
+      <div class="hero-stat"><b>0</b><span>повторно въвеждане</span></div>
+      <div class="hero-stat"><b>1</b><span>затворен цикъл</span></div>
     </div>
   </div>
 
-  <!-- ДЕН 3 -->
-  <h2 class="day-title">Ден 3: Финални гледки и Заминаване</h2>
-  <div class="timeline">
-    <div class="timeline-item"><strong>Сутринта</strong> – Спокойна разходка по плажа под скалите на Тропеа. Време за финални покупки, сувенири или италианско кафе в центъра.</div>
-    <div class="timeline-item"><strong>11:00 ч.</strong> – Освобождаване на квартирата.</div>
-    <div class="timeline-item"><strong>11:30 - 12:30 ч.</strong> – Живописно пътуване на север към Ламеция Терме. Ако разполагате с време, може да спрете за обяд край пътя и да се насладите на последните морски пейзажи.</div>
-    <div class="timeline-item"><strong>12:30 ч.</strong> – Връщане на колата под наем на летище Ламеция Терме.</div>
-    
+  <div class="hero-panel">
+    <div class="hero-panel-head"><span><span class="hero-panel-dot"></span>ЦИКЪЛ · ДНЕС 18:42</span><span>СИНХРОНИЗИРАНО</span></div>
+    <div class="readout-row"><span class="num">01</span><div class="rt"><b>Резервация — Влади, парти "Динозаври"</b><span>Зала А · 12 деца · торта поръчана</span></div><span class="status">На живо</span></div>
+    <div class="readout-row"><span class="num">02</span><div class="rt"><b>Заявка → Доставчик "Плодове"</b><span>Автоматично генерирана от менюто</span></div><span class="status">Изпратено</span></div>
+    <div class="readout-row"><span class="num">03</span><div class="rt"><b>Каса — приход парти + депозит</b><span>Вписано в дневния баланс</span></div><span class="status">Готово</span></div>
+    <div class="readout-row" style="margin-bottom:0;"><span class="num">04</span><div class="rt"><b>Смяна — аниматор, 6.5ч</b><span>Начислено към ведомостта</span></div><span class="status">Готово</span></div>
+  </div>
+</section>
+
+<section id="ecosystem" class="loop-section">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Как работи</span>
+      <h2>Един цикъл, който се затваря сам</h2>
+      <p>Всеки от четирите процеса подава данни на следващия автоматично. Няма таблица, в която да преписваш наново нещо, което вече си въвел.</p>
+    </div>
+
+    <div class="loop-row reveal">
+      <div class="loop-node">
+        <div class="n">01</div>
+        <h3>Резервация и меню</h3>
+        <p>Клиентът избира дата, зала, кетъринг и торта — всичко в една дигитална форма.</p>
+      </div>
+      <div class="loop-node">
+        <div class="n">02</div>
+        <h3>Авто заявки</h3>
+        <p>Системата сортира нужните продукти по доставчик и генерира поръчките сама.</p>
+      </div>
+      <div class="loop-node">
+        <div class="n">03</div>
+        <h3>Отчет и каса</h3>
+        <p>Приходът от партито и разходът по заявката се вписват в баланса без ръчно въвеждане.</p>
+      </div>
+      <div class="loop-node">
+        <div class="n">04</div>
+        <h3>Персонал и заплати</h3>
+        <p>Отработените часове от смяната се калкулират директно към ведомостта.</p>
+      </div>
+
+      <div class="loop-connector" style="left:calc(12.5% - 0.75rem);"><svg viewBox="0 0 100 2" preserveAspectRatio="none"><line x1="0" y1="1" x2="94" y2="1" stroke="#4A4D6B" stroke-width="2" stroke-dasharray="1 6" stroke-linecap="round"/><polygon points="94,-2 100,1 94,4" fill="#4A4D6B"/></svg><span class="flow-dot"></span></div>
+      <div class="loop-connector" style="left:calc(37.5% - 0.75rem);"><svg viewBox="0 0 100 2" preserveAspectRatio="none"><line x1="0" y1="1" x2="94" y2="1" stroke="#4A4D6B" stroke-width="2" stroke-dasharray="1 6" stroke-linecap="round"/><polygon points="94,-2 100,1 94,4" fill="#4A4D6B"/></svg><span class="flow-dot" style="animation-delay:0.7s;"></span></div>
+      <div class="loop-connector" style="left:calc(62.5% - 0.75rem);"><svg viewBox="0 0 100 2" preserveAspectRatio="none"><line x1="0" y1="1" x2="94" y2="1" stroke="#4A4D6B" stroke-width="2" stroke-dasharray="1 6" stroke-linecap="round"/><polygon points="94,-2 100,1 94,4" fill="#4A4D6B"/></svg><span class="flow-dot" style="animation-delay:1.4s;"></span></div>
+    </div>
+
+    <div class="loop-return reveal">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M29 12C29 7 24 3 17 3S5 7 5 12" stroke="#E2941F" stroke-width="2.2" stroke-linecap="round"/><polygon points="0,10 8,10 4,17" fill="#E2941F" transform="translate(1,-6)"/><path d="M5 22c0 5 5 9 12 9s12-4 12-9" stroke="#E2941F" stroke-width="2.2" stroke-linecap="round"/><polygon points="26,24 34,24 30,31" fill="#E2941F"/></svg>
+      <p>Стъпка 04 подава чисти данни обратно към стъпка 01 — цикълът се повтаря за следващото парти.</p>
+    </div>
+  </div>
+</section>
+
+<section id="modules" class="wrap">
+  <div class="section-head reveal">
+    <span class="eyebrow">Модули в системата</span>
+    <h2>Четири инструмента, една база данни</h2>
+    <p>Всеки модул работи самостоятелно, но истинската сила идва от общата им връзка.</p>
   </div>
 
-  <div class="image-gallery">
-    <div class="photo-card">
-      <img src="https://cdn.blastness.biz/media/716/top/thumbs/full/1600_tropea1.jpg" alt="Tropea Old Town">
-      <div class="photo-caption">Гледка към плажа и Стария град на Тропеа</div>
+  <div class="modules-grid reveal">
+    <div class="module-card">
+      <div class="module-top"><span class="module-icon">🎂</span><span class="module-index">Модул 01</span></div>
+      <h3>Резервационна система</h3>
+      <p>Пълна организация на рождени дни и капацитет на залите в реално време.</p>
+      <ul class="feature-list">
+        <li>Форма за данни на рожденика и гостите</li>
+        <li>Избор на менюта, кетъринг, торти и анимация</li>
+        <li>График на залите без препокриване</li>
+        <li>Автоматични известия за клиенти</li>
+      </ul>
+      <span class="module-tag">Резервации</span>
     </div>
-    <div class="photo-card">
-      <img src="https://www.italymammamia.com/images/scilla-belvedere-2.jpg" alt="Calabria Coast">
-      <div class="photo-caption">Панорама към крайбрежието на Калабрия</div>
+
+    <div class="module-card">
+      <div class="module-top"><span class="module-icon">📦</span><span class="module-index">Модул 02</span></div>
+      <h3>Заявки и доставка</h3>
+      <p>Превръща резервациите в точни поръчки към вашите доставчици.</p>
+      <ul class="feature-list">
+        <li>Автоматично изчислени количества храна</li>
+        <li>Сортиране на заявките по доставчик</li>
+        <li>По-малко фира и пропуснати продукти</li>
+        <li>Проследяване на статус на поръчката</li>
+      </ul>
+      <span class="module-tag">Доставки</span>
+    </div>
+
+    <div class="module-card">
+      <div class="module-top"><span class="module-icon">📊</span><span class="module-index">Модул 03</span></div>
+      <h3>Финансов отчет и баланс</h3>
+      <p>Оперативен контрол над приходите, разходите и рентабилността.</p>
+      <ul class="feature-list">
+        <li>Следене на каса и банкови плащания</li>
+        <li>Автоматично вписани приходи от партита</li>
+        <li>Разходи по категория и доставчик</li>
+        <li>Графики за заетост и печалба</li>
+      </ul>
+      <span class="module-tag">Отчетност</span>
+    </div>
+
+    <div class="module-card">
+      <div class="module-top"><span class="module-icon">👥</span><span class="module-index">Модул 04</span></div>
+      <h3>Персонал и заплати</h3>
+      <p>Планиране на смени и автоматични калкулации на заплати.</p>
+      <ul class="feature-list">
+        <li>Отчитане на часове от аниматори</li>
+        <li>Автоматични надници и бонуси</li>
+        <li>Пряка връзка с отчета за разходите</li>
+        <li>Следене на аванси и изплащания</li>
+      </ul>
+      <span class="module-tag">Персонал</span>
     </div>
   </div>
+</section>
+
+<section id="comparison" class="wrap">
+  <div class="section-head reveal">
+    <span class="eyebrow">Сравнение</span>
+    <h2>Ръчно управление срещу KidsHub OS</h2>
+    <p>Защо преминаването към затворен цикъл спестява десетки часове всеки месец.</p>
+  </div>
+
+  <div class="compare-wrap reveal">
+    <div class="compare-row head">
+      <div>Процес</div><div>Ръчно управление</div><div>KidsHub OS</div>
+    </div>
+    <div class="compare-row">
+      <div class="proc">Приемане на парти</div>
+      <div><span class="mark bad">✕</span>Запис в тетрадка / Excel</div>
+      <div><span class="mark good">✓</span>Дигитална форма с меню и торта</div>
+    </div>
+    <div class="compare-row">
+      <div class="proc">Поръчки към доставчици</div>
+      <div><span class="mark bad">✕</span>Ръчно преписване и обаждания</div>
+      <div><span class="mark good">✓</span>Автоматично сортиране и пращане</div>
+    </div>
+    <div class="compare-row">
+      <div class="proc">Следене на финанси</div>
+      <div><span class="mark bad">✕</span>Разпокъсани бележки</div>
+      <div><span class="mark good">✓</span>Централизиран баланс на живо</div>
+    </div>
+    <div class="compare-row">
+      <div class="proc">Заплати и смени</div>
+      <div><span class="mark bad">✕</span>Субективно изчисление на часове</div>
+      <div><span class="mark good">✓</span>Прецизен отчет, вързан с касата</div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" class="wrap">
+  <div class="section-head reveal">
+    <span class="eyebrow">Варианти за внедряване</span>
+    <h2>Изберете модул или цялата екосистема</h2>
+    <p>Решете конкретен проблем сега, или вземете целия затворен цикъл наведнъж.</p>
+  </div>
+
+  <div class="pricing-grid reveal">
+    <div class="ticket">
+      <div class="ticket-stub"></div>
+      <h3>Модулен вариант</h3>
+      <p class="price-desc">За центрове с нужда от дигитализация на конкретен процес.</p>
+      <ul class="feature-list-alt">
+        <li>Избор на 1 или 2 модула</li>
+        <li>Конфигурация за конкретния обект</li>
+        <li>Обучение на екипа</li>
+        <li>Техническа поддръжка</li>
+      </ul>
+      <a href="tel:+359893237720" class="btn btn-ghost">Запитване за модул</a>
+      <div class="contact-line">
+        <a href="tel:+359893237720" class="contact-pill">📞 0893 237 720</a>
+        <a href="mailto:St.Ruskov@gmail.com" class="contact-pill">✉ St.Ruskov@gmail.com</a>
+      </div>
+    </div>
+
+    <div class="ticket featured">
+      <span class="ticket-badge">Препоръчано</span>
+      <div class="ticket-stub"></div>
+      <h3>All-in-One екосистема</h3>
+      <p class="price-desc">Пълният затворен цикъл — максимално спестено време, пълен контрол.</p>
+      <ul class="feature-list-alt">
+        <li>Всички 4 модула, напълно синхронизирани</li>
+        <li>Автоматични заявки към доставчици</li>
+        <li>Централизирани финанси и заплати</li>
+        <li>Приоритетна поддръжка и ъпдейти</li>
+      </ul>
+      <a href="tel:+359893237720" class="btn btn-accent">Вземи пълната система</a>
+      <div class="contact-line">
+        <a href="tel:+359893237720" class="contact-pill">📞 0893 237 720</a>
+        <a href="mailto:St.Ruskov@gmail.com" class="contact-pill">✉ St.Ruskov@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="wrap">
+  <div class="cta-band reveal">
+    <h2>Готови ли сте да затворите цикъла?</h2>
+    <p>Свържете се за безплатна демонстрация на живо с реалните модули на системата.</p>
+    <a href="tel:+359893237720" class="btn btn-accent" style="padding:0.9rem 2.2rem; font-size:1rem;">Поискай демо на живо</a>
+    <div class="contact-line">
+      <a href="tel:+359893237720" class="contact-pill">📞 0893 237 720</a>
+      <a href="mailto:St.Ruskov@gmail.com" class="contact-pill">✉ St.Ruskov@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">&copy; 2026 KidsHub OS · Системи за автоматизация на детски партита центрове.</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
 
 </body>
 </html>
